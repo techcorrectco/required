@@ -1,6 +1,6 @@
 {
   "name": "@technicallycorrect/requires",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Claude Code /command for requirements-driven development",
   "main": "index.js",
   "bin": {
