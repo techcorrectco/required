@@ -76,6 +76,12 @@ ALL commits made by Claude Code must follow Conventional Commits specification (
 - `fix(parser): handle empty requirement lists`
 - `docs: update README with usage examples`
 
+**Pre-commit checklist:**
+1. **Run linter**: `npm run lint`
+2. **Run tests**: `npm test` 
+3. **Update version in package.json** according to semantic versioning rules
+4. **Write clear commit message** without unnecessary adjectives
+
 **Post-commit workflow:**
 After making a commit, run `/clear` to clear context.
 
