@@ -1,0 +1,32 @@
+{
+  "name": "@technicallycorrect/required",
+  "version": "0.2.0",
+  "description": "Claude Code /command for requirements-driven development",
+  "main": "index.js",
+  "bin": {
+    "required": "./bin/required.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/techcorrectco/required.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/techcorrectco/required/issues"
+  },
+  "homepage": "https://github.com/techcorrectco/required#readme",
+  "dependencies": {
+    "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  }
+}
