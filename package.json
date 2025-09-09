@@ -7,9 +7,8 @@
     "requires": "./bin/requires.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "standard",
-    "lint:fix": "standard --fix"
+    "test": "ava",
+    "lint": "standard --fix"
   },
   "repository": {
     "type": "git",
@@ -24,9 +23,12 @@
   },
   "homepage": "https://github.com/techcorrectco/requires#readme",
   "dependencies": {
-    "commander": "^14.0.0"
+    "commander": "^14.0.0",
+    "fs-extra": "^11.3.1",
+    "gray-matter": "^4.0.3"
   },
   "devDependencies": {
+    "ava": "^6.4.1",
     "standard": "^17.1.2"
   }
 }
