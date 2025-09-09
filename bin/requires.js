@@ -4,15 +4,15 @@ const { program } = require('commander')
 const { version } = require('../package.json')
 
 program
-  .name('required')
+  .name('requires')
   .description('Claude Code /command for requirements-driven development')
   .version(version)
 
 program
   .command('init')
-  .description('Initialize a new "required" project')
+  .description('Initialize a new "requires" project')
   .action(() => {
-    console.log('Initializing "required"...')
+    console.log('Initializing "requires"...')
     // TODO: Implement init functionality
   })
 

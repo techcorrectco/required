@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains "required" - a Claude Code /command for requirements-driven development. The project is currently in its initial stages.
+This repository contains "requires" - a Claude Code /command for requirements-driven development. The project is currently in its initial stages.
 
 ## Current Status
 
 This repository contains:
 - CLI tool for initializing requirements-driven development projects
-- NPM package configuration with `@technicallycorrect/required` scope
+- NPM package configuration with `@technicallycorrect/requires` scope
 - Commander.js-based CLI with `init` command
 - Template generation for `requirements.md` files
 
@@ -24,7 +24,7 @@ npm install
 ### CLI Usage
 The package provides a CLI tool accessible via:
 ```bash
-npx @technicallycorrect/required init
+npx @technicallycorrect/requires init
 ```
 
 This creates a `requirements.md` template file for requirements-driven development.
@@ -92,14 +92,14 @@ When making commits, update the version in package.json according to Semantic Ve
 ### Project Structure
 ```
 ├── bin/
-│   └── required.js          # CLI entry point with commander.js
+│   └── requires.js          # CLI entry point with commander.js
 ├── package.json             # NPM package configuration
 ├── CLAUDE.md               # Development guidelines
 └── README.md               # Project documentation
 ```
 
 ### CLI Architecture
-- **Entry Point**: `bin/required.js` - executable CLI script
+- **Entry Point**: `bin/requires.js` - executable CLI script
 - **Command Framework**: Commander.js for argument parsing and command handling  
 - **Init Command**: Creates `requirements.md` template in target directory
 - **Template System**: String-based template generation for requirements files
