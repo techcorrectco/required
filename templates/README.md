@@ -1,20 +1,20 @@
-# Requirements Directory
+# Requires Directory
 
-This directory contains structured requirements for your project, organized as part of the requires/ directory structure.
+This directory contains structured requirements and designs for your project.
 
 ## Directory Structure
 
 ```
 requires/
-├── requirements/     # This directory - structured requirement markdown files
+├── requirements/     # Structured requirement markdown files
 └── designs/          # Implementation design plans and analysis
 ```
 
 ## Getting Started
 
 1. Use `/requires "your feature description"` to generate requirements
-2. Requirements will be created as markdown files with structured metadata in this directory
-3. Use `/requires design [ID]` to plan implementation (saved to ../designs/)
+2. Requirements will be created as markdown files with structured metadata in the requirements/ subdirectory
+3. Use `/requires design [ID]` to plan implementation (saved to designs/ subdirectory)
 4. Use `/requires implement [ID]` to generate code
 
 ## File Structure
