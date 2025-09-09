@@ -18,10 +18,20 @@ async function initializeProject () {
 
     console.log('! Initializing requirements-driven development...')
 
-    // Create requirements directory
-    const reqDir = path.join(cwd, 'requirements')
-    await fs.ensureDir(reqDir)
-    console.log('✓ Created requirements/ directory')
+    // Create parent requires directory
+    const requiresDir = path.join(cwd, 'requires')
+    await fs.ensureDir(requiresDir)
+    console.log('✓ Created requires/ directory')
+
+    // Create requirements subdirectory
+    const requirementsDir = path.join(requiresDir, 'requirements')
+    await fs.ensureDir(requirementsDir)
+    console.log('✓ Created requires/requirements/ directory')
+
+    // Create designs subdirectory
+    const designsDir = path.join(requiresDir, 'designs')
+    await fs.ensureDir(designsDir)
+    console.log('✓ Created requires/designs/ directory')
 
     // Create .claude/commands directory
     const claudeDir = path.join(cwd, '.claude', 'commands')
@@ -33,7 +43,7 @@ async function initializeProject () {
     console.log('✓ Created Claude Code slash commands')
 
     // Copy README template to requirements directory
-    await copyTemplate(templatesDir, 'README.md', reqDir, 'README.md')
+    await copyTemplate(templatesDir, 'README.md', requirementsDir, 'README.md')
     console.log('✓ Created requirements README')
 
     console.log('\n! Requirements project initialized!')
@@ -43,8 +53,9 @@ async function initializeProject () {
     console.log('  /requires implement REQUIREMENT-ID - Generate code implementation')
     console.log('\nNext steps:')
     console.log('  1. Use /requires "your feature description" to generate requirements')
-    console.log('  2. Review generated requirements in requirements/ directory')
+    console.log('  2. Review generated requirements in requires/requirements/ directory')
     console.log('  3. Use /requires design [ID] to plan implementation')
+    console.log('  4. Design plans will be saved in requires/designs/ directory')
   } catch (error) {
     console.error('✗ Error initializing project:', error.message)
     process.exit(1)

@@ -32,12 +32,14 @@ test('init command creates directory structure', async t => {
     t.true(output.includes('Requirements project initialized!'))
 
     // Check that directories were created
-    t.true(await fs.pathExists(path.join(tempDir, 'requirements')))
+    t.true(await fs.pathExists(path.join(tempDir, 'requires')))
+    t.true(await fs.pathExists(path.join(tempDir, 'requires', 'requirements')))
+    t.true(await fs.pathExists(path.join(tempDir, 'requires', 'designs')))
     t.true(await fs.pathExists(path.join(tempDir, '.claude')))
     t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands')))
 
     // Check that files were created
-    t.true(await fs.pathExists(path.join(tempDir, 'requirements', 'README.md')))
+    t.true(await fs.pathExists(path.join(tempDir, 'requires', 'requirements', 'README.md')))
     t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands', 'requires.md')))
   } finally {
     // Clean up
@@ -74,14 +76,15 @@ test('init command creates correct requirements README', async t => {
     runRequires('init', tempDir)
 
     // Read the requirements README file
-    const readmePath = path.join(tempDir, 'requirements', 'README.md')
+    const readmePath = path.join(tempDir, 'requires', 'requirements', 'README.md')
     const readmeContent = await fs.readFile(readmePath, 'utf8')
 
     // Check that it contains expected content
-    t.true(readmeContent.includes('# Requirements Template'))
+    t.true(readmeContent.includes('# Requirements Directory'))
     t.true(readmeContent.includes('This directory contains structured requirements'))
     t.true(readmeContent.includes('FEATURE-1.md'))
     t.true(readmeContent.includes('/requires "your feature description"'))
+    t.true(readmeContent.includes('designs/          # Implementation design plans'))
   } finally {
     // Clean up
     await fs.remove(tempDir)
