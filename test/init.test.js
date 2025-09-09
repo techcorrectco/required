@@ -91,7 +91,7 @@ test('init command creates correct requirements README', async t => {
   }
 })
 
-test('init command handles missing templates gracefully', async t => {
+test.serial('init command handles missing templates gracefully', async t => {
   const tempDir = await createTempDir()
 
   // Temporarily rename templates directory to test error handling
@@ -112,6 +112,76 @@ test('init command handles missing templates gracefully', async t => {
     if (await fs.pathExists(backupDir)) {
       await fs.move(backupDir, templatesDir)
     }
+    await fs.remove(tempDir)
+  }
+})
+
+test('init command handles existing .claude directory', async t => {
+  const tempDir = await createTempDir()
+
+  try {
+    // Pre-create .claude directory
+    const claudeDir = path.join(tempDir, '.claude')
+    await fs.ensureDir(claudeDir)
+
+    // Run the init command
+    const output = runRequires('init', tempDir)
+
+    // Check that it recognized existing directory and created commands subdirectory
+    t.true(output.includes('Created commands/ directory in existing .claude/'))
+    t.true(output.includes('Added Claude Code slash commands'))
+
+    // Verify structure was created correctly
+    t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands')))
+    t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands', 'requires.md')))
+  } finally {
+    await fs.remove(tempDir)
+  }
+})
+
+test('init command handles existing .claude/commands directory', async t => {
+  const tempDir = await createTempDir()
+
+  try {
+    // Pre-create .claude/commands directory
+    const commandsDir = path.join(tempDir, '.claude', 'commands')
+    await fs.ensureDir(commandsDir)
+
+    // Run the init command
+    const output = runRequires('init', tempDir)
+
+    // Check that it recognized existing commands directory
+    t.true(output.includes('Found existing .claude/commands/ directory'))
+    t.true(output.includes('Added Claude Code slash commands'))
+
+    // Verify our command was added
+    t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands', 'requires.md')))
+  } finally {
+    await fs.remove(tempDir)
+  }
+})
+
+test.serial('init command handles existing requires.md command', async t => {
+  const tempDir = await createTempDir()
+
+  try {
+    // Pre-create .claude/commands directory with existing requires.md
+    const commandsDir = path.join(tempDir, '.claude', 'commands')
+    await fs.ensureDir(commandsDir)
+    await fs.writeFile(path.join(commandsDir, 'requires.md'), 'existing content')
+
+    // Run the init command
+    const output = runRequires('init', tempDir)
+
+    // Check that it still ran successfully
+    t.true(output.includes('Found existing .claude/commands/ directory'))
+    t.true(output.includes('Added Claude Code slash commands'))
+
+    // Verify our command replaced the existing one
+    const commandContent = await fs.readFile(path.join(commandsDir, 'requires.md'), 'utf8')
+    t.true(commandContent.includes('Generate requirements from feature description'))
+    t.false(commandContent.includes('existing content'))
+  } finally {
     await fs.remove(tempDir)
   }
 })

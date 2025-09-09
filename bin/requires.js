@@ -33,14 +33,26 @@ async function initializeProject () {
     await fs.ensureDir(designsDir)
     console.log('✓ Created requires/designs/ directory')
 
-    // Create .claude/commands directory
-    const claudeDir = path.join(cwd, '.claude', 'commands')
-    await fs.ensureDir(claudeDir)
-    console.log('✓ Created .claude/commands/ directory')
+    // Handle .claude/commands directory
+    const claudeBaseDir = path.join(cwd, '.claude')
+    const claudeDir = path.join(claudeBaseDir, 'commands')
+
+    const claudeExists = await fs.pathExists(claudeBaseDir)
+    const commandsExists = await fs.pathExists(claudeDir)
+
+    if (claudeExists && commandsExists) {
+      console.log('✓ Found existing .claude/commands/ directory')
+    } else if (claudeExists && !commandsExists) {
+      await fs.ensureDir(claudeDir)
+      console.log('✓ Created commands/ directory in existing .claude/')
+    } else {
+      await fs.ensureDir(claudeDir)
+      console.log('✓ Created .claude/commands/ directory')
+    }
 
     // Copy slash commands from templates
     await copyTemplate(templatesDir, 'requires.md', claudeDir, 'requires.md')
-    console.log('✓ Created Claude Code slash commands')
+    console.log('✓ Added Claude Code slash commands')
 
     // Copy README template to requirements directory
     await copyTemplate(templatesDir, 'README.md', requirementsDir, 'README.md')
