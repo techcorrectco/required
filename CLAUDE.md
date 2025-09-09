@@ -66,6 +66,11 @@ ALL commits made by Claude Code must follow Conventional Commits specification (
 
 **Breaking changes:** Use `BREAKING CHANGE:` in footer or `!` after type/scope.
 
+**Commit message style:**
+- Use clear, direct language without unnecessary adjectives
+- Avoid words like "intelligent", "comprehensive", "robust", "elegant"
+- Focus on what was done, not how well it was done
+
 **Examples:**
 - `feat: add requirements parser`
 - `fix(parser): handle empty requirement lists`
