@@ -11,6 +11,17 @@ async function createTempDir () {
   return tempDir
 }
 
+// Helper to safely remove a temporary directory
+async function removeTempDir (tempDir) {
+  try {
+    if (await fs.pathExists(tempDir)) {
+      await fs.remove(tempDir)
+    }
+  } catch (error) {
+    console.warn(`Warning: Failed to clean up test directory ${tempDir}:`, error.message)
+  }
+}
+
 // Helper to run the requires command
 function runRequires (args, cwd) {
   const binPath = path.join(__dirname, '..', 'bin', 'requires.js')
@@ -43,7 +54,7 @@ test('init command creates directory structure', async t => {
     t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands', 'requires.md')))
   } finally {
     // Clean up
-    await fs.remove(tempDir)
+    await removeTempDir(tempDir)
   }
 })
 
@@ -64,7 +75,7 @@ test('init command creates correct slash command content', async t => {
     t.true(commandContent.includes('/requires "Add user authentication with email/password"'))
   } finally {
     // Clean up
-    await fs.remove(tempDir)
+    await removeTempDir(tempDir)
   }
 })
 
@@ -87,7 +98,7 @@ test('init command creates correct requirements README', async t => {
     t.true(readmeContent.includes('designs/          # Implementation design plans'))
   } finally {
     // Clean up
-    await fs.remove(tempDir)
+    await removeTempDir(tempDir)
   }
 })
 
@@ -112,7 +123,7 @@ test.serial('init command handles missing templates gracefully', async t => {
     if (await fs.pathExists(backupDir)) {
       await fs.move(backupDir, templatesDir)
     }
-    await fs.remove(tempDir)
+    await removeTempDir(tempDir)
   }
 })
 
