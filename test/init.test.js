@@ -91,7 +91,7 @@ test('init command creates correct requirements README', async t => {
     const readmeContent = await fs.readFile(readmePath, 'utf8')
 
     // Check that it contains expected content
-    t.true(readmeContent.includes('# Requirements Directory'))
+    t.true(readmeContent.includes('# Requires Directory'))
     t.true(readmeContent.includes('This directory contains structured requirements'))
     t.true(readmeContent.includes('FEATURE-1.md'))
     t.true(readmeContent.includes('/requires "your feature description"'))
