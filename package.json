@@ -1,10 +1,10 @@
 {
   "name": "@technicallycorrect/requires",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Claude Code /command for requirements-driven development",
   "main": "index.js",
   "bin": {
-    "requires": "./bin/requires.js"
+    "requires": "bin/requires.js"
   },
   "scripts": {
     "test": "ava",
