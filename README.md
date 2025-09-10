@@ -58,6 +58,12 @@ Analyzes a requirement and creates an implementation plan. Design documents are 
 ```
 Generates code implementation based on the requirement and its design plan.
 
+#### Update Requirements
+```
+/requires update REQUIREMENT-ID "new requirement text"
+```
+Updates an existing requirement with new text and analyzes impact on all related requirements (parent, child, sibling, and dependent). Validates that all relationships remain consistent and identifies which requirements need updates.
+
 ## Example Workflow
 
 1. **Initialize the project:**
@@ -89,6 +95,13 @@ Generates code implementation based on the requirement and its design plan.
    ```
    
    Generates the actual code implementation.
+
+5. **Update requirements (if needed):**
+   ```
+   /requires update USER-AUTH-1 "User registration with email, password, and optional profile picture"
+   ```
+   
+   Updates the requirement and validates that parent, child, sibling, and dependent requirements are still consistent. Reports which requirements need updates due to the change.
 
 ## License
 
