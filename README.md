@@ -8,13 +8,7 @@ Requires is a CLI tool that sets up a structured requirements-driven development
 
 ## Installation
 
-Install globally via npm:
-
-```bash
-npm install -g @technicallycorrect/requires
-```
-
-Or use directly with npx (no installation required):
+Use directly with npx (no installation required):
 
 ```bash
 npx @technicallycorrect/requires init
@@ -27,8 +21,6 @@ npx @technicallycorrect/requires init
 Run the `init` command in your project directory:
 
 ```bash
-requires init
-# or
 npx @technicallycorrect/requires init
 ```
 
