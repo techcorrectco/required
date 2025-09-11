@@ -23,12 +23,13 @@ async function removeTempDir (tempDir) {
 }
 
 // Helper to run the requires command
-function runRequires (args, cwd) {
+function runRequires (args, cwd, env = {}) {
   const binPath = path.join(__dirname, '..', 'bin', 'requires.js')
   return execSync(`node "${binPath}" ${args}`, {
     cwd,
     encoding: 'utf8',
-    stdio: 'pipe'
+    stdio: 'pipe',
+    env: { ...process.env, ...env }
   })
 }
 
@@ -138,8 +139,8 @@ test('init command handles existing .claude directory', async t => {
     // Run the init command
     const output = runRequires('init', tempDir)
 
-    // Check that it recognized existing directory and created commands subdirectory
-    t.true(output.includes('Created commands/ directory in existing .claude/'))
+    // Check that it created the commands directory and added commands
+    t.true(output.includes('Created  .claude/commands/ directory'))
     t.true(output.includes('Added Claude Code slash commands'))
 
     // Verify structure was created correctly
@@ -161,8 +162,8 @@ test('init command handles existing .claude/commands directory', async t => {
     // Run the init command
     const output = runRequires('init', tempDir)
 
-    // Check that it recognized existing commands directory
-    t.true(output.includes('Found existing .claude/commands/ directory'))
+    // Check that it created the commands directory and added commands
+    t.true(output.includes('Created  .claude/commands/ directory'))
     t.true(output.includes('Added Claude Code slash commands'))
 
     // Verify our command was added
@@ -185,7 +186,7 @@ test.serial('init command handles existing requires.md command', async t => {
     const output = runRequires('init', tempDir)
 
     // Check that it still ran successfully
-    t.true(output.includes('Found existing .claude/commands/ directory'))
+    t.true(output.includes('Created  .claude/commands/ directory'))
     t.true(output.includes('Added Claude Code slash commands'))
 
     // Verify our command replaced the existing one
@@ -194,5 +195,74 @@ test.serial('init command handles existing requires.md command', async t => {
     t.false(commandContent.includes('existing content'))
   } finally {
     await fs.remove(tempDir)
+  }
+})
+
+test('init --global installs commands to global directory', async t => {
+  const tempProjectDir = await createTempDir()
+  const tempHomeDir = await createTempDir()
+
+  try {
+    // Run the global init command
+    const output = runRequires('init --global', tempProjectDir, { HOME: tempHomeDir })
+
+    // Check that the command ran successfully
+    t.true(output.includes('Global requires commands installed!'))
+    t.true(output.includes('Available commands (from any directory)'))
+
+    // Check that global commands directory was created
+    const globalCommandsDir = path.join(tempHomeDir, '.claude', 'commands')
+    t.true(await fs.pathExists(globalCommandsDir))
+    t.true(await fs.pathExists(path.join(globalCommandsDir, 'requires.md')))
+
+    // Check that local project directories were NOT created
+    t.false(await fs.pathExists(path.join(tempProjectDir, 'requires')))
+    t.false(await fs.pathExists(path.join(tempProjectDir, '.claude')))
+  } finally {
+    await removeTempDir(tempProjectDir)
+    await removeTempDir(tempHomeDir)
+  }
+})
+
+test('init -g installs commands to global directory', async t => {
+  const tempProjectDir = await createTempDir()
+  const tempHomeDir = await createTempDir()
+
+  try {
+    // Run the global init command with short flag
+    const output = runRequires('init -g', tempProjectDir, { HOME: tempHomeDir })
+
+    // Check that the command ran successfully
+    t.true(output.includes('Global requires commands installed!'))
+    t.true(output.includes('Available commands (from any directory)'))
+
+    // Check that global commands directory was created
+    const globalCommandsDir = path.join(tempHomeDir, '.claude', 'commands')
+    t.true(await fs.pathExists(globalCommandsDir))
+    t.true(await fs.pathExists(path.join(globalCommandsDir, 'requires.md')))
+
+    // Check that local project directories were NOT created
+    t.false(await fs.pathExists(path.join(tempProjectDir, 'requires')))
+    t.false(await fs.pathExists(path.join(tempProjectDir, '.claude')))
+  } finally {
+    await removeTempDir(tempProjectDir)
+    await removeTempDir(tempHomeDir)
+  }
+})
+
+test('init --global does not create README in requirements directory', async t => {
+  const tempProjectDir = await createTempDir()
+  const tempHomeDir = await createTempDir()
+
+  try {
+    // Run the global init command
+    runRequires('init --global', tempProjectDir, { HOME: tempHomeDir })
+
+    // Check that no README was created (since no requirements directory was made)
+    t.false(await fs.pathExists(path.join(tempProjectDir, 'requires', 'requirements', 'README.md')))
+    t.false(await fs.pathExists(path.join(tempHomeDir, '.claude', 'commands', 'README.md')))
+  } finally {
+    await removeTempDir(tempProjectDir)
+    await removeTempDir(tempHomeDir)
   }
 })

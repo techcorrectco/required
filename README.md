@@ -24,6 +24,18 @@ Run the `init` command in your project directory:
 npx @technicallycorrect/requires init
 ```
 
+### Global Installation
+
+To install the requires commands globally (available from any directory):
+
+```bash
+npx @technicallycorrect/requires init --global
+# or
+npx @technicallycorrect/requires init -g
+```
+
+This installs the commands to your global `.claude/commands/` directory (`~/.claude/commands/`) making them available in any project.
+
 This will create the following structure:
 
 ```
