@@ -4,37 +4,15 @@ Claude Code /command for requirements-driven development.
 
 ## Overview
 
-Requires is a CLI tool that sets up a structured requirements-driven development workflow in your projects. It creates organized directories for requirements and design documents, and provides Claude Code slash commands for generating requirements, planning implementations, and creating code.
-
-## Installation
-
-Use directly with npx (no installation required):
-
-```bash
-npx @technicallycorrect/requires init
-```
+Requires is a CLI tool that sets up a structured requirements-driven development workflow in your projects. It creates organized directories for requirements and design documents, and provides Claude Code slash commands for generating requirements, planning implementations, and generating code.
 
 ## Usage
-
-### Initialize a Project
 
 Run the `init` command in your project directory:
 
 ```bash
-npx @technicallycorrect/requires init
+npx @technicallycorrect/requires init [-g | --global]
 ```
-
-### Global Installation
-
-To install the requires commands globally (available from any directory):
-
-```bash
-npx @technicallycorrect/requires init --global
-# or
-npx @technicallycorrect/requires init -g
-```
-
-This installs the commands to your global `.claude/commands/` directory (`~/.claude/commands/`) making them available in any project.
 
 This will create the following structure:
 
@@ -48,7 +26,7 @@ your-project/
         └── requires.md   # Claude Code slash commands
 ```
 
-### Available Claude Code Commands
+### Claude Code Commands
 
 After initialization, you can use these slash commands in Claude Code:
 
