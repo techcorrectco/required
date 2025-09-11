@@ -41,7 +41,7 @@ test('init command creates directory structure', async t => {
     const output = runRequires('init', tempDir)
 
     // Check that the command ran successfully
-    t.true(output.includes('Requirements project initialized!'))
+    t.true(output.includes('project directories created'))
 
     // Check that directories were created
     t.true(await fs.pathExists(path.join(tempDir, 'requires')))
@@ -140,8 +140,8 @@ test('init command handles existing .claude directory', async t => {
     const output = runRequires('init', tempDir)
 
     // Check that it created the commands directory and added commands
-    t.true(output.includes('Created  .claude/commands/ directory'))
-    t.true(output.includes('Added Claude Code slash commands'))
+    t.true(output.includes('project directories created'))
+    t.true(output.includes('command installed in project .claude directory'))
 
     // Verify structure was created correctly
     t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands')))
@@ -163,8 +163,8 @@ test('init command handles existing .claude/commands directory', async t => {
     const output = runRequires('init', tempDir)
 
     // Check that it created the commands directory and added commands
-    t.true(output.includes('Created  .claude/commands/ directory'))
-    t.true(output.includes('Added Claude Code slash commands'))
+    t.true(output.includes('project directories created'))
+    t.true(output.includes('command installed in project .claude directory'))
 
     // Verify our command was added
     t.true(await fs.pathExists(path.join(tempDir, '.claude', 'commands', 'requires.md')))
@@ -186,8 +186,8 @@ test.serial('init command handles existing requires.md command', async t => {
     const output = runRequires('init', tempDir)
 
     // Check that it still ran successfully
-    t.true(output.includes('Created  .claude/commands/ directory'))
-    t.true(output.includes('Added Claude Code slash commands'))
+    t.true(output.includes('project directories created'))
+    t.true(output.includes('command installed in project .claude directory'))
 
     // Verify our command replaced the existing one
     const commandContent = await fs.readFile(path.join(commandsDir, 'requires.md'), 'utf8')
@@ -207,8 +207,8 @@ test('init --global installs commands to global directory', async t => {
     const output = runRequires('init --global', tempProjectDir, { HOME: tempHomeDir })
 
     // Check that the command ran successfully
-    t.true(output.includes('Global requires commands installed!'))
-    t.true(output.includes('Available commands (from any directory)'))
+    t.true(output.includes('project directories created'))
+    t.true(output.includes('command installed in home .claude directory'))
 
     // Check that global commands directory was created
     const globalCommandsDir = path.join(tempHomeDir, '.claude', 'commands')
@@ -233,8 +233,8 @@ test('init -g installs commands to global directory', async t => {
     const output = runRequires('init -g', tempProjectDir, { HOME: tempHomeDir })
 
     // Check that the command ran successfully
-    t.true(output.includes('Global requires commands installed!'))
-    t.true(output.includes('Available commands (from any directory)'))
+    t.true(output.includes('project directories created'))
+    t.true(output.includes('command installed in home .claude directory'))
 
     // Check that global commands directory was created
     const globalCommandsDir = path.join(tempHomeDir, '.claude', 'commands')

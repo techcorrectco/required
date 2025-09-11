@@ -22,63 +22,43 @@ async function initializeProject (options) {
     let claudeDir
     if (isGlobal) {
       claudeDir = path.join(os.homedir(), '.claude', 'commands')
-      console.log('! Installing requires commands globally...')
     } else {
       claudeDir = path.join(cwd, '.claude', 'commands')
-      console.log('! Initializing requirements-driven development...')
 
       // Create parent requires directory
       const requiresDir = path.join(cwd, 'requires')
       await fs.ensureDir(requiresDir)
-      console.log('✓ Created requires/ directory')
 
       // Create requirements subdirectory
       const requirementsDir = path.join(requiresDir, 'requirements')
       await fs.ensureDir(requirementsDir)
-      console.log('✓ Created requires/requirements/ directory')
 
       // Create designs subdirectory
       const designsDir = path.join(requiresDir, 'designs')
       await fs.ensureDir(designsDir)
-      console.log('✓ Created requires/designs/ directory')
     }
 
     // Ensure claude commands directory exists
     await fs.ensureDir(claudeDir)
-    console.log(`✓ Created ${isGlobal ? 'global' : ''} .claude/commands/ directory`)
 
     // Copy slash commands from templates
     await copyTemplate(templatesDir, 'requires.md', claudeDir, 'requires.md')
-    console.log('✓ Added Claude Code slash commands')
 
     // Copy README template to requirements directory (only for local projects)
     if (!isGlobal) {
       const requirementsDir = path.join(cwd, 'requires', 'requirements')
       await copyTemplate(templatesDir, 'README.md', requirementsDir, 'README.md')
-      console.log('✓ Created requirements README')
     }
 
+    console.log('project directories created')
     if (isGlobal) {
-      console.log('\n! Global requires commands installed!')
-      console.log('\nAvailable commands (from any directory):')
+      console.log('command installed in home .claude directory')
     } else {
-      console.log('\n! Requirements project initialized!')
-      console.log('\nAvailable commands:')
+      console.log('command installed in project .claude directory')
     }
-    
-    console.log('  /requires "feature description"  - Generate requirements from feature text')
-    console.log('  /requires design REQUIREMENT-ID  - Analyze implementation approach')
-    console.log('  /requires implement REQUIREMENT-ID - Generate code implementation')
-    
-    if (!isGlobal) {
-      console.log('\nNext steps:')
-      console.log('  1. Use /requires "your feature description" to generate requirements')
-      console.log('  2. Review generated requirements in requires/requirements/ directory')
-      console.log('  3. Use /requires design [ID] to plan implementation')
-      console.log('  4. Design plans will be saved in requires/designs/ directory')
-    }
+    console.log('\nStar the project at https://github.com/techcorrectco/requires')
   } catch (error) {
-    console.error('✗ Error initializing project:', error.message)
+    console.error('error initializing project: ', error.message)
     process.exit(1)
   }
 }
