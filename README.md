@@ -11,8 +11,14 @@ Requires is a CLI tool that sets up a structured requirements-driven development
 Run the `init` command in your project directory:
 
 ```bash
-npx @technicallycorrect/requires init [-g | --global]
+npx @technicallycorrect/requires init [options]
 ```
+
+**Options:**
+- `-g, --global` - Install commands globally in `~/.claude/commands/` instead of project-local `.claude/commands/`
+- `-f, --force` - Overwrite existing files without prompting
+
+**Note:** If the `requires.md` command already exists, you'll be prompted to overwrite unless using `--force`.
 
 This will create the following structure:
 

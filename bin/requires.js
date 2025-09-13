@@ -5,6 +5,7 @@ const { version } = require('../package.json')
 const fs = require('fs-extra')
 const path = require('path')
 const os = require('os')
+const readline = require('readline')
 
 program
   .name('requires')
@@ -17,6 +18,7 @@ async function initializeProject (options) {
     const cwd = process.cwd()
     const templatesDir = path.join(__dirname, '..', 'templates')
     const isGlobal = options.global
+    const force = options.force
 
     // Determine claude commands directory
     let claudeDir
@@ -40,6 +42,27 @@ async function initializeProject (options) {
 
     // Ensure claude commands directory exists
     await fs.ensureDir(claudeDir)
+
+    // Check if requires command already exists and get user confirmation
+    const requiresPath = path.join(claudeDir, 'requires.md')
+    if (!force && await fs.pathExists(requiresPath)) {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      })
+
+      const answer = await new Promise((resolve) => {
+        rl.question('requires command exists. overwrite? (Y/n): ', (answer) => {
+          rl.close()
+          resolve(answer)
+        })
+      })
+
+      const shouldOverwrite = answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes' || answer === ''
+      if (!shouldOverwrite) {
+        return
+      }
+    }
 
     // Copy slash commands from templates
     await copyTemplate(templatesDir, 'requires.md', claudeDir, 'requires.md')
@@ -79,6 +102,7 @@ program
   .command('init')
   .description('Initialize a new "requires" project')
   .option('-g, --global', 'Install commands globally')
+  .option('-f, --force', 'Overwrite existing files without prompting')
   .action(initializeProject)
 
 program.parse()

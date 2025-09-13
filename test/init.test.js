@@ -173,7 +173,7 @@ test('init command handles existing .claude/commands directory', async t => {
   }
 })
 
-test.serial('init command handles existing requires.md command', async t => {
+test.serial('init command with --force overwrites existing requires.md command', async t => {
   const tempDir = await createTempDir()
 
   try {
@@ -182,8 +182,33 @@ test.serial('init command handles existing requires.md command', async t => {
     await fs.ensureDir(commandsDir)
     await fs.writeFile(path.join(commandsDir, 'requires.md'), 'existing content')
 
-    // Run the init command
-    const output = runRequires('init', tempDir)
+    // Run the init command with --force
+    const output = runRequires('init --force', tempDir)
+
+    // Check that it still ran successfully
+    t.true(output.includes('project directories created'))
+    t.true(output.includes('command installed in project .claude directory'))
+
+    // Verify our command replaced the existing one
+    const commandContent = await fs.readFile(path.join(commandsDir, 'requires.md'), 'utf8')
+    t.true(commandContent.includes('Generate requirements from feature description'))
+    t.false(commandContent.includes('existing content'))
+  } finally {
+    await fs.remove(tempDir)
+  }
+})
+
+test.serial('init command with -f overwrites existing requires.md command', async t => {
+  const tempDir = await createTempDir()
+
+  try {
+    // Pre-create .claude/commands directory with existing requires.md
+    const commandsDir = path.join(tempDir, '.claude', 'commands')
+    await fs.ensureDir(commandsDir)
+    await fs.writeFile(path.join(commandsDir, 'requires.md'), 'existing content')
+
+    // Run the init command with -f
+    const output = runRequires('init -f', tempDir)
 
     // Check that it still ran successfully
     t.true(output.includes('project directories created'))
