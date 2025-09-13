@@ -28,10 +28,10 @@ Otherwise, treat arguments as feature description and execute requirement genera
 
 ## Requirements Generation Prompt
 
-You are implementing a requirements management system that transforms natural language feature descriptions into structured markdown requirements.
+You are implementing a requirements management system that transforms natural language feature descriptions into structured markdown requirements with atomic, reviewable implementations.
 
 ### Your Task
-Analyze the provided feature description and generate 1 or more atomic requirements following these specifications:
+Analyze the provided feature description and generate a hierarchical set of requirements optimized for small, focused implementations and code reviews.
 
 ### Existing Requirements Analysis
 - **Read all existing requirements** from the `requires/requirements/` directory
@@ -61,8 +61,22 @@ Analyze the provided feature description and generate 1 or more atomic requireme
 - **Auto-increment appropriately** within the existing structure
 - **Generate parent-child relationships** based on semantic analysis of existing and new requirements
 
-### Requirement Structure
-Generate markdown files using this exact template for each requirement:
+### Requirement Decomposition Strategy
+Break down features into two-level hierarchical requirements optimized for reviewable implementations:
+
+#### Parent Requirements (Orchestration Level)
+- **Purpose:** Provide feature overview and coordinate child requirements
+- **Scope:** Business objectives and high-level functional overview
+- **Implementation:** Not directly implemented - fulfilled through child requirements
+
+#### Child Requirements (Implementation Level)  
+- **Purpose:** Single-responsibility, atomic requirements that can be implemented independently
+- **Scope:** One focused area of functionality (input validation, data processing, error handling, etc.)
+- **Implementation:** Direct 1:1 mapping to implementation work and pull requests
+- **Size Target:** 5-10 acceptance criteria maximum for manageable code reviews
+
+### Parent Requirement Template
+Generate parent requirements using this template:
 
 ```markdown
 ---
@@ -82,46 +96,92 @@ version: 1.0.0
 # [ID]: [TITLE]
 
 ## Requirement Statement
-[RFC-2119 compliant statement]
+[RFC-2119 compliant statement describing overall feature capability]
 
 ## Business Rationale
-[Why this requirement exists and business value]
+[Why this feature exists and business value provided]
+
+## Acceptance Criteria
+**Implementation Note: This requirement is implemented through its child requirements below.**
+
+### Functional Overview
+- [ ] [High-level capability 1]
+- [ ] [High-level capability 2]
+- [ ] [High-level capability 3]
+
+### Child Requirements
+- [CHILD-ID-1]: [Brief description of child responsibility]
+- [CHILD-ID-2]: [Brief description of child responsibility]
+- [CHILD-ID-3]: [Brief description of child responsibility]
+
+### Success Criteria
+[How to know the overall feature is complete and working]
+```
+
+### Child Requirement Template
+Generate child requirements using this template:
+
+```markdown
+---
+id: [GENERATED_ID]
+title: "[GENERATED_TITLE]"
+type: [functional|non-functional|constraint]
+status: draft
+parent: [PARENT_ID]
+dependencies: []
+conflicts: []
+created: [CURRENT_DATE]
+modified: [CURRENT_DATE]
+author: [SYSTEM_USER]
+version: 1.0.0
+---
+
+# [ID]: [TITLE]
+
+## Requirement Statement
+[RFC-2119 compliant statement for specific, focused functionality]
+
+## Business Rationale
+[Why this specific aspect is needed and how it contributes to parent requirement]
 
 ## Acceptance Criteria
 **Implementation Note: Build ONLY what is specified below. Do not add functionality beyond these criteria.**
 
-### Input Requirements
-- [ ] [Specific input handling requirements]
-
-### Processing Requirements
-- [ ] [Core business logic requirements]
-
-### Output Requirements  
-- [ ] [Expected outputs and responses]
-
-### Error Handling
-- [ ] [Required error conditions to handle]
-- [ ] [Explicitly list what NOT to handle]
+### [Focused Area] Requirements
+- [ ] [Specific requirement 1]
+- [ ] [Specific requirement 2]
+- [ ] [Specific requirement 3]
+- [ ] [Specific requirement 4]
+- [ ] [Specific requirement 5]
 
 ### Integration Requirements
 - [ ] [How this integrates with existing systems]
 - [ ] [Existing utilities/classes to use]
+- [ ] [Interface contracts to maintain]
+
+### Success Criteria
+[How to verify this specific functionality is complete]
 ```
 
 ### Analysis Requirements
 1. **Read existing requirements** from `requires/requirements/` directory to understand current structure
-2. **Break down** the feature into atomic, testable requirements that fit existing hierarchy
-3. **Identify appropriate parents** through semantic analysis of existing requirements
-4. **Generate comprehensive acceptance criteria** that define exact implementation boundaries
-5. **Include negative criteria** (what NOT to implement) to prevent scope creep
-6. **Ensure each requirement** has exactly one RFC-2119 keyword and addresses one specific capability
-7. **Maintain single top-level requirement** - all new requirements must be children of existing structure
+2. **Break down** the feature into parent (orchestration) and child (implementation) requirements
+3. **Ensure child requirements are atomic** - each should be implementable in a single, focused pull request
+4. **Apply decomposition rule:** If a child requirement has 8-12+ acceptance criteria, break it into sub-requirements
+5. **Target 5-8 acceptance criteria per atomic requirement** for optimal code review size
+6. **Limit hierarchy depth** to maximum 3-4 levels to avoid over-engineering
+7. **Identify appropriate parents** through semantic analysis of existing requirements
+8. **Generate comprehensive but focused acceptance criteria** that define exact implementation boundaries
+9. **Include integration requirements** that specify how child implementations coordinate
+10. **Ensure each requirement** has exactly one RFC-2119 keyword and addresses one specific capability
+11. **Maintain single top-level requirement** - all new requirements must be children of existing structure
 
 ### Output Format
 Create temporary requirement files for user review. Present them using standard file preview format showing:
-- File path: `requires/requirements/[FEATURE-ID].md` for feature-level, `requires/requirements/[REQUIREMENT-ID].md` for specific requirements
+- File path: `requires/requirements/[FEATURE-ID].md` for parent requirements, `requires/requirements/[CHILD-ID].md` for child requirements
 - Full markdown content for each file
 - Clear indication these are new files for review
+- Parent-child relationships clearly documented in both directions
 
 ## Design Prompt
 
