@@ -304,9 +304,9 @@ Present a structured implementation plan and save it to the designs directory:
 - `path/to/existing/file.js`: [What changes and why]
 
 ## Implementation Steps
-1. [Step 1]: [Specific task with clear outcome]
-2. [Step 2]: [Specific task with clear outcome]
-3. [Step 3]: [Specific task with clear outcome]
+1. [Specific task with clear outcome]
+2. [Specific task with clear outcome]
+3. [Specific task with clear outcome]
 
 ## Integration Points
 ### Existing Components to Use
@@ -372,43 +372,54 @@ Present a structured implementation plan and save it to the designs directory:
 
 ## Implement Prompt
 
-You are generating code implementation based on a requirement's acceptance criteria and implementation plan.
+You are generating focused code implementation based on a requirement's acceptance criteria and comprehensive implementation plan that contains all necessary hierarchical context.
 
 ### Your Task
-Generate code that implements the specified requirement following these principles:
+Generate code that implements the specified requirement following these principles, optimized for human code review:
 
 ### Implementation Principles
 1. **Read requirement file** - Parse the markdown for exact acceptance criteria
-2. **Follow implementation plan** - Use the design created by `/requires design` if available
+2. **Follow implementation plan** - Use the design created by `/requires design` which contains distilled hierarchical context
 3. **Analyze existing codebase** - Follow established patterns and conventions
 4. **Build ONLY specified functionality** - Do not add features beyond acceptance criteria
 5. **Maintain integration requirements** - Use specified existing utilities and patterns
-6. **Generate documentation feedback** - Identify CLAUDE.md improvements needed
+6. **Optimize for code review** - Create focused, reviewable changes that match the requirement's atomic scope
 
 ### Implementation Steps
 
 #### 1. Context Analysis
 - Read the requirement markdown file from `requires/requirements/[REQUIREMENT-ID].md`
-- Review the implementation plan from `requires/designs/[REQUIREMENT-ID].md`
+- Review the comprehensive implementation plan from `requires/designs/[REQUIREMENT-ID].md`
+- **Use design plan as authoritative context** - All hierarchical context has been pre-analyzed and distilled
 - Analyze existing codebase structure and patterns
 - Use CLAUDE.md files as technical reference (assume they are complete and current)
 
-#### 2. Code Generation
+#### 2. Branch Creation
+- **For parent requirements:** Create new parent branch: `[REQUIREMENT-ID]` from main/master
+- **For child requirements:** Create new child branch: `[CHILD-REQUIREMENT-ID]` from parent branch `[PARENT-REQUIREMENT-ID]`
+- Switch to the appropriate branch for all implementation work
+- Branch hierarchy mirrors requirement hierarchy for coordinated development
+
+#### 3. Code Generation
 - Generate code that meets EVERY item in the acceptance criteria
 - Follow the implementation plan and technical approach specified in design phase
+- **Create commits that map to Implementation Steps** from the design document
+- **Commit message format:** `[REQUIREMENT-ID].[N]: [Step description from design plan]`
+- **Example:** `USER-AUTH-1-2.1: Set up input validation framework`
+- **Respect hierarchical constraints** captured in the design plan
+- **Maintain sibling coordination** as specified in design plan
 - Use specified existing utilities and classes
 - Implement ONLY what is explicitly required (no feature creep)
 - Include appropriate error handling as specified
 - Add necessary tests following project testing patterns
-- **Commit implementation** with descriptive commit message referencing requirement ID
 
-#### 3. Status Update
-- Update the requirement status to `implemented ([commit-hash])` 
+#### 4. Status Update
+- Update the requirement status to `implemented (branch: [REQUIREMENT-ID], commits: [commit-hash-list])` 
 - Include all commit hashes if implementation spans multiple commits
 - Update the requirement markdown file with new status and modification timestamp
 - Ensure traceability between requirement and actual code changes
 
-#### 4. Test Implementation
+#### 5. Test Implementation
 - Create tests that validate each acceptance criteria item
 - Reference the requirement ID in test descriptions and comments
 - Use test names that map directly to acceptance criteria
@@ -416,9 +427,10 @@ Generate code that implements the specified requirement following these principl
 - Follow existing test structure and naming conventions
 - Ensure tests verify ONLY the specified functionality (no additional test coverage beyond acceptance criteria)
 
-#### 5. Integration Compliance
+#### 6. Integration Compliance
 - Follow the integration plan established in design phase
 - Use existing interfaces and contracts as specified
+- **Implement sibling coordination points** as documented in design plan
 - Maintain backward compatibility unless explicitly allowed to break
 - Ensure code matches the technical approach from implementation plan
 
@@ -449,12 +461,17 @@ If you encounter any missing or unclear documentation during implementation, pro
 After implementation, verify:
 - [ ] All acceptance criteria implemented exactly as specified
 - [ ] Implementation follows the design plan approach
+- [ ] **Each commit maps to an Implementation Step** from design document
+- [ ] **Commit messages follow format:** `[REQUIREMENT-ID].[N]: [Description]`
+- [ ] **Hierarchical constraints respected** as documented in design plan
+- [ ] **Sibling coordination implemented** according to design specifications
 - [ ] All tests reference the requirement ID and map to acceptance criteria
 - [ ] Test names clearly indicate which acceptance criteria they validate
 - [ ] Existing tests pass
 - [ ] Code follows project conventions established in CLAUDE.md
 - [ ] Integration points working as planned in design phase
-- [ ] Requirement status updated to `implemented ([commit-hash])`
+- [ ] **Implementation creates focused, reviewable pull request**
+- [ ] Requirement status updated to `implemented (branch: [REQUIREMENT-ID], commits: [hashes])`
 - [ ] Commit messages reference requirement ID for traceability
 
 ### Quality Guidelines
@@ -463,19 +480,23 @@ After implementation, verify:
 - **Consistent patterns** - Follow existing codebase style and architecture
 - **Error boundaries** - Handle only the errors specified in acceptance criteria
 - **Integration respect** - Use existing utilities rather than creating new ones
+- **Human reviewability** - Create focused changes that can be thoroughly reviewed in one session
+- **Trust the design plan** - All hierarchical context analysis has been completed, focus on execution
 
 ## Update Prompt
 
-You are updating an existing requirement with new text while maintaining consistency and relationships.
+You are updating an existing requirement with new text while maintaining consistency across the hierarchical structure and coordinating with any existing implementations.
 
 ### Your Task
-Update the specified requirement with new content while preserving the requirement structure and relationships.
+Update the specified requirement with new content while preserving the requirement structure, relationships, and coordinating with existing branch-based implementations.
 
 ### Update Process
 
-#### 1. Read Current Requirement
+#### 1. Read Current Requirement and Context
 - Load the existing requirement markdown file from `requires/requirements/[REQUIREMENT-ID].md`
 - Parse current content, metadata, and relationships
+- **Check implementation status** - identify if requirement has been implemented (has branch/commits)
+- **Read existing design plan** from `requires/designs/[REQUIREMENT-ID].md` if it exists
 - Understand current position in requirement hierarchy
 - Note existing dependencies and conflicts
 
@@ -483,39 +504,59 @@ Update the specified requirement with new content while preserving the requireme
 - Parse the new requirement text following RFC-2119 and ASD-STE100 standards
 - Identify changes in scope, functionality, or business rationale
 - Determine if requirement type or relationships should change
+- **Assess if changes require decomposition** - apply 8-12+ acceptance criteria rule
 - Assess impact on existing acceptance criteria
 
-#### 3. Dependency Analysis
+#### 3. Hierarchical Impact Analysis
+- **Parent Impact Analysis:** 
+  - If updating child: Does change affect parent requirement scope?
+  - If updating parent: How do changes cascade to all child requirements?
+- **Child Impact Analysis:**
+  - If updating parent: Which children become invalid/need updates?
+  - If updating child: Do sibling relationships need adjustment?
+- **Sibling Coordination:**
+  - How do changes affect other requirements at the same level?
+  - Are there shared interfaces or contracts that need updating?
+
+#### 4. Implementation Coordination
+- **Branch Status Check:**
+  - Is requirement currently implemented in a branch?
+  - Are there child requirement branches that depend on this?
+  - What's the status of any related pull requests?
+- **Implementation Impact:**
+  - Do changes invalidate existing implementation work?
+  - Can existing implementation be updated, or does it need reimplementation?
+  - How do changes affect integration with sibling implementations?
+
+#### 5. Dependency Analysis
 - **Downstream Impact:** Requirements that depend on this one and how they're affected
 - **Upstream Impact:** Requirements this depends on and whether those relationships are still valid
 - **New Dependencies:** Whether updated acceptance criteria create new dependency needs
 - **Broken Dependencies:** Whether changes invalidate existing dependency relationships
 - **Dependency Chain:** How changes ripple through the entire dependency network
 
-#### 4. Hierarchical Validation
-- **Parent Consistency:** Ensure updated requirement still aligns with parent's scope and acceptance criteria
-- **Children Validity:** Verify all child requirements are still achievable and relevant
-- **Scope Boundaries:** Check if updated requirement scope still fits within parent boundaries
-- **AC Alignment:** Ensure acceptance criteria changes don't conflict with parent or children requirements
+#### 6. Design Plan Impact
+- **Existing Design Analysis:** How do changes affect current design plan?
+- **Design Invalidation:** Does update require complete design plan regeneration?
+- **Implementation Step Impact:** Which implementation steps need modification?
 
-#### 5. Update Generation
+#### 7. Update Generation
 - **Preserve:** ID, creation date, version history, existing relationships where appropriate
 - **Update:** Requirement statement, business rationale, acceptance criteria
 - **Version Increment:** Follow semantic versioning (MAJOR.MINOR.PATCH) based on change impact:
-  - **MAJOR:** Breaking changes to acceptance criteria that affect dependent requirements
+  - **MAJOR:** Breaking changes to acceptance criteria that affect dependent requirements or invalidate implementations
   - **MINOR:** New acceptance criteria or scope expansion that maintains backward compatibility
   - **PATCH:** Bug fixes, clarifications, or minor wording improvements without scope changes
 - **Timestamp Update:** Update modification timestamp
 - **Maintain:** Consistent formatting and structure
 
-#### 6. Relationship Validation
-- Ensure updated requirement still fits logically under its parent
-- Verify dependencies are still valid and necessary
-- Check for new conflicts with sibling requirements
-- Suggest relationship changes if hierarchy no longer makes sense
+#### 8. Branch and Implementation Strategy
+- **For implemented requirements:** Provide strategy for updating existing branches/implementations
+- **For parent requirements with implemented children:** Coordinate update strategy across child branches
+- **For changes requiring reimplementation:** Recommend branch cleanup and recreation strategy
 
 ### Output Format
-Present the updated requirement file with impact analysis and change recommendations:
+Present the updated requirement file with comprehensive impact analysis and coordination strategy:
 
 ```markdown
 # Updated Requirement: [REQUIREMENT-ID]
@@ -525,54 +566,78 @@ Present the updated requirement file with impact analysis and change recommendat
 - **Business Rationale:** [Updates to rationale]
 - **Acceptance Criteria:** [New, modified, or removed criteria]
 - **Relationships:** [Dependency or conflict changes]
+- **Version Change:** [Previous version] → [New version] ([MAJOR/MINOR/PATCH])
 
-## Impact Analysis
-### Requirements Needing Updates
-#### Parent Requirements
-- **[PARENT-ID]:** [Specific changes needed to acceptance criteria/scope]
-  - *Impact:* [Why this requirement needs updating]
+## Hierarchical Impact Analysis
+### Parent Requirement Impact
+- **[PARENT-ID]:** [How parent requirement is affected]
+  - *Impact:* [Why parent needs attention]
   - *Recommended Changes:* [Specific updates needed]
 
-#### Child Requirements  
+### Child Requirements Impact  
 - **[CHILD-ID-1]:** [How this child is affected]
-  - *Impact:* [Why this requirement may no longer be valid/achievable]
+  - *Impact:* [Why this child may no longer be valid/achievable]
   - *Recommended Changes:* [Updates needed or removal recommendation]
+  - *Implementation Status:* [Current branch/implementation status]
 
-#### Dependent Requirements
-- **[DEPENDENT-ID]:** [How this requirement that depends on the updated one is affected]
-  - *Impact:* [Why this dependency relationship needs attention]
-  - *Recommended Changes:* [Specific updates to maintain consistency]
-
-#### Sibling Requirements
-- **[SIBLING-ID]:** [How other requirements under same parent are affected]
-  - *Impact:* [Conflicts or inconsistencies created]
+### Sibling Requirements Impact
+- **[SIBLING-ID]:** [How siblings are affected]
+  - *Impact:* [Coordination or consistency issues]
   - *Recommended Changes:* [Updates needed for consistency]
 
-### Requirements NOT Affected
-- [LIST OF REQUIREMENTS]: [Brief explanation why no changes needed]
+### Dependency Impact
+- **Dependent Requirements:** [Requirements that depend on this one]
+- **Dependency Requirements:** [Requirements this one depends on]
+- **New Dependencies:** [New dependencies created by changes]
+- **Broken Dependencies:** [Dependencies invalidated by changes]
 
-## Cascade Update Recommendation
+## Implementation Coordination Strategy
+### Current Implementation Status
+- **Branch Status:** [Current branch and implementation status]
+- **Related Branches:** [Child/parent branches that may be affected]
+- **PR Status:** [Any existing pull requests and their status]
+
+### Update Strategy
+- **Implementation Approach:** [How to handle existing implementations]
+  - If MAJOR change: [Strategy for reimplementation]
+  - If MINOR change: [Strategy for incremental updates]  
+  - If PATCH change: [Strategy for minimal updates]
+- **Branch Coordination:** [How to coordinate across related branches]
+- **Timeline Recommendations:** [Suggested order of updates]
+
+## Design Plan Impact
+- **Current Design Status:** [Status of existing design plan]
+- **Design Update Required:** [Whether design plan needs regeneration]
+- **Implementation Steps Affected:** [Which steps need modification]
+
+## Cascade Update Recommendations
 **The following requirements need updates due to this change:**
 - **[PARENT-ID]**: [Brief description of why it needs updating]
 - **[CHILD-ID-1]**: [Brief description of impact]
 - **[DEPENDENT-ID-1]**: [Brief description of dependency impact]
 - **[SIBLING-ID-1]**: [Brief description of sibling conflict/inconsistency]
 
-Would you like me to recommend specific changes to these affected requirements?
-- Type "yes" to receive detailed update recommendations for each affected requirement
+### Implementation Coordination Required
+- **[REQUIREMENT-ID]**: [Implementation coordination needed]
+- **[RELATED-ID]**: [Branch/implementation coordination required]
+
+Would you like me to recommend specific changes to these affected requirements and provide implementation coordination guidance?
+- Type "yes" to receive detailed update recommendations and implementation coordination strategy
 - Type "no" to proceed with just this requirement update
 
 ## Updated Requirement File
 [Full updated markdown file content saved to requires/requirements/[REQUIREMENT-ID].md]
 
-## Design Plan File  
-[If design plan exists, save updated design plan to requires/designs/[REQUIREMENT-ID].md]
+## Updated Design Plan File  
+[If design plan exists and needs updates, save updated design plan to requires/designs/[REQUIREMENT-ID].md]
 ```
 
 ### Update Guidelines
 - **Preserve context** - Don't lose important historical information
 - **Hierarchical consistency** - Ensure changes align with parent and don't break children
+- **Implementation awareness** - Consider existing branch-based implementations
 - **Cascading analysis** - Check impact on parent, children, siblings, and dependencies
 - **Semantic versioning** - Use appropriate version increment based on change impact
-- **Scope boundaries** - Verify updated requirement still fits within parent scope
-- **AC alignment** - Ensure acceptance criteria changes maintain hierarchical consistency
+- **Branch coordination** - Provide clear strategy for managing implementation updates
+- **Design plan maintenance** - Keep design plans current with requirement changes
+- **Human reviewability** - Ensure updated requirements still optimize for reviewable implementations
