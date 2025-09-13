@@ -185,61 +185,76 @@ Create temporary requirement files for user review. Present them using standard 
 
 ## Design Prompt
 
-You are analyzing a requirement to create a comprehensive implementation plan before code generation.
+You are analyzing a requirement to create a comprehensive implementation plan that distills hierarchical context and prepares for focused code generation.
 
 ### Your Task
-Read the specified requirement markdown file and create a detailed implementation plan that prepares for successful code generation.
+Read the specified requirement and its full hierarchical context to create a detailed implementation plan that captures all necessary context for successful, focused implementation.
 
 ### Analysis Steps
 
-#### 1. Requirement Analysis
+#### 1. Hierarchical Context Analysis
 - Read the requirement markdown file from `requires/requirements/[REQUIREMENT-ID].md`
+- **Start with current requirement** to understand specific implementation needs
+- **Walk up the hierarchy** (parent → grandparent → top-level) to gather relevant context
+- **For each parent level:** Extract only context that impacts current requirement implementation
+- **Analyze sibling requirements** (same parent) for consistency requirements and shared interfaces
+- **Stop traversal** when additional parent context becomes irrelevant to implementation
+- **Identify coordination points** with related requirements at same level
+
+#### 2. Requirement Analysis
 - Parse the acceptance criteria to understand exact functionality needed
 - Identify the RFC-2119 keyword level (SHALL/SHOULD/MAY) for priority context
 - Extract business rationale and integration requirements
+- **Distill hierarchical context** into implementation-relevant constraints and decisions
 
-#### 2. Codebase Analysis
+#### 3. Codebase Analysis
 - Examine existing code structure and patterns
 - Read relevant CLAUDE.md files for technical context
 - Identify existing utilities, classes, and patterns to leverage
 - Analyze current architecture and conventions
+- **Apply architectural constraints** derived from hierarchical analysis
 
-#### 3. Technical Design
-- Determine implementation approach and architecture patterns
-- Specify which design patterns to follow
+#### 4. Technical Design
+- Determine implementation approach and architecture patterns consistent with hierarchy
+- Specify which design patterns to follow based on parent requirement decisions
 - Identify data structures and algorithms needed
-- Plan error handling strategy
-- Design integration points with existing systems
+- Plan error handling strategy aligned with feature-level approaches
+- Design integration points with existing systems and sibling implementations
 
-#### 4. File Impact Assessment
+#### 5. File Impact Assessment
 - List all files that need creation or modification
 - Specify the purpose of each file change
 - Identify potential breaking changes
 - Plan for backward compatibility if needed
+- **Consider impact on sibling requirement implementations**
 
-#### 5. Implementation Strategy
+#### 6. Implementation Strategy
 - Create ordered list of development tasks
 - Identify dependencies between implementation steps
 - Suggest implementation sequence for best results
 - Estimate complexity and potential challenges
+- **Ensure approach aligns with parent requirement strategy**
 
-#### 6. Integration Planning
+#### 7. Integration Planning
 - Specify how this integrates with existing systems
 - List existing utilities/classes that should be used
-- Define interfaces and contracts needed
+- Define interfaces and contracts needed (especially for sibling coordination)
 - Plan for testing integration points
+- **Document coordination requirements** with related implementations
 
-#### 7. Risk Assessment
+#### 8. Risk Assessment
 - Identify potential technical challenges
 - Note dependencies on external systems or libraries
 - Flag any assumptions that need validation
 - Suggest mitigation strategies for identified risks
+- **Highlight hierarchical conflicts** or inconsistencies
 
-#### 8. Documentation Analysis
+#### 9. Documentation Analysis
 - Review existing CLAUDE.md files for completeness
 - Identify missing technical documentation needed for implementation
 - Note outdated information that contradicts current code
 - Flag gaps in architectural or integration documentation
+- **Document hierarchical context** that should be preserved for future implementations
 
 ### Output Format
 Present a structured implementation plan and save it to the designs directory:
@@ -255,9 +270,24 @@ Present a structured implementation plan and save it to the designs directory:
 - **Priority:** [RFC-2119 keyword level]
 - **Business Value:** [Brief rationale summary]
 
+## Hierarchical Context
+### Top-Level Requirement Context
+- **Business Objectives:** [Relevant objectives from top-level requirement]
+- **Architectural Constraints:** [Key constraints that impact this implementation]
+
+### Parent Requirement Context
+- **Feature Scope:** [How this fits into the broader feature]
+- **Integration Patterns:** [Established patterns this must follow]
+- **Design Decisions:** [Parent-level decisions that constrain this implementation]
+
+### Sibling Coordination
+- **Related Requirements:** [List of sibling requirements and their responsibilities]
+- **Shared Interfaces:** [Interfaces or contracts that must be maintained]
+- **Consistency Requirements:** [Patterns that must be consistent across siblings]
+
 ## Technical Approach
 ### Architecture Pattern
-[Specific pattern to follow]
+[Specific pattern to follow, justified by hierarchical context]
 
 ### Core Components
 - [Component 1]: [Purpose and responsibility]
@@ -286,17 +316,23 @@ Present a structured implementation plan and save it to the designs directory:
 ### New Interfaces Needed
 - [Interface Name]: [Purpose and methods]
 
+### Sibling Coordination Points
+- [Sibling Requirement]: [How implementations must coordinate]
+
 ## Testing Strategy
 ### Unit Tests
 [What needs unit test coverage]
 
 ### Integration Tests
-[What integration scenarios to test]
+[What integration scenarios to test, including sibling coordination]
 
 ## Risk Assessment
 ### Technical Risks
 - [Risk 1]: [Mitigation strategy]
 - [Risk 2]: [Mitigation strategy]
+
+### Hierarchical Risks
+- [Risk related to parent/sibling coordination]: [Mitigation strategy]
 
 ### Dependencies
 - [External dependency]: [Impact and alternatives]
@@ -310,19 +346,27 @@ Present a structured implementation plan and save it to the designs directory:
 
 ### Recommended CLAUDE.md Updates
 1. Add to [CLAUDE.md file]:
+   
    [Specific content to add]
 
 2. Update [CLAUDE.md file]:
+   
    [Specific content to change]
 
 ### Outdated Information
 - [File/Location]: [What needs updating and why]
+
+### Context Preservation
+- [Hierarchical context that should be documented]: [Why it's important for future implementations]
 ```
 
 ### Guidelines
+- **Walk up the hierarchy** - Start with current requirement and analyze parents only for relevant context
+- **Distill relevant context** - Extract only the constraints and decisions that impact this implementation
 - **Be specific** - Avoid vague statements like "update the auth system"
 - **Reference existing code** - Point to specific files, classes, and patterns to follow
-- **Consider edge cases** - Plan for error conditions and boundary cases
+- **Consider sibling coordination** - Plan for consistency and integration with related requirements
+- **Document context preservation** - Capture hierarchical insights for future reference
 - **Validate feasibility** - Ensure the plan is technically achievable with current codebase
 - **Focus on acceptance criteria** - Ensure plan addresses every point in the requirement's acceptance criteria
 
