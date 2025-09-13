@@ -250,14 +250,10 @@ Present a structured implementation plan and save it to the designs directory:
 
 ### Recommended CLAUDE.md Updates
 1. Add to [CLAUDE.md file]:
-   ```markdown
    [Specific content to add]
-   ```
 
 2. Update [CLAUDE.md file]:
-   ```markdown
    [Specific content to change]
-   ```
 
 ### Outdated Information
 - [File/Location]: [What needs updating and why]
